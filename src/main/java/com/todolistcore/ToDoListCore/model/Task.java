@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,7 +31,7 @@ public class Task implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "sales")
+    @ManyToMany(mappedBy = "tasks")
     private Set<Colaborate> colaborate;
 
 

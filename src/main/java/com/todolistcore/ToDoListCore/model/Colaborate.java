@@ -14,6 +14,10 @@ import jakarta.persistence.*;
 public class Colaborate implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -24,7 +28,17 @@ public class Colaborate implements Serializable{
             joinColumns = @JoinColumn(name = "colaborate_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id"))
     private Set<Task> tasks;
+
     
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;
