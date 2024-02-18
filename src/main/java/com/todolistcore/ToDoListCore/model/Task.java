@@ -32,7 +32,7 @@ public class Task implements Serializable {
     private User user;
 
     @ManyToMany(mappedBy = "tasks")
-    private Set<Colaborate> colaborate;
+    private Set<Collaborator> colaborate;
 
 
     public long getId() {
@@ -99,11 +99,11 @@ public class Task implements Serializable {
         this.user = user;
     }
 
-    public Set<Colaborate> getColaborate() {
+    public Set<Collaborator> getColaborate() {
         return colaborate;
     }
 
-    public void setColaborate(Set<Colaborate> colaborate) {
+    public void setColaborate(Set<Collaborator> colaborate) {
         this.colaborate = colaborate;
     }
 
