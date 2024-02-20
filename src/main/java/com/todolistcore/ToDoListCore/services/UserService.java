@@ -49,6 +49,7 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setUsername(request.username());
         user.setName(request.name());
+        user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setEnabled(true);
         user.setAccountNonExpired(true);
