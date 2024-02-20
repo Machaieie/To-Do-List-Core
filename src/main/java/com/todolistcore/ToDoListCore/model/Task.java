@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.hibernate.annotations.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -31,8 +32,14 @@ public class Task implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "tasks")
-    private Set<Collaborator> colaborate;
+    
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "task_colaborations",
+            joinColumns = @JoinColumn(name = "Collaborator_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id"))
+    private Set<Collaborator> collaborators;
 
 
     public long getId() {
@@ -99,13 +106,15 @@ public class Task implements Serializable {
         this.user = user;
     }
 
-    public Set<Collaborator> getColaborate() {
-        return colaborate;
+    public Set<Collaborator> getCollaborators() {
+        return collaborators;
     }
 
-    public void setColaborate(Set<Collaborator> colaborate) {
-        this.colaborate = colaborate;
+    public void setCollaborators(Set<Collaborator> collaborators) {
+        this.collaborators = collaborators;
     }
+
+   
 
     
 

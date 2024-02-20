@@ -22,11 +22,7 @@ public class Collaborator implements Serializable{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "task_colaborations",
-            joinColumns = @JoinColumn(name = "Collaborator_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id"))
+    @ManyToMany(mappedBy = "collaborators")
     private Set<Task> tasks;
 
     

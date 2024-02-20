@@ -29,7 +29,7 @@ public class User implements UserDetails{
     private String name;
     private String username;
     private String password;
-    private Email email;
+    private String email;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -84,11 +84,11 @@ public class User implements UserDetails{
         return name;
     }
     
-    public Email getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Email email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
