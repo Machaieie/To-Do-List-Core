@@ -10,7 +10,7 @@ public record SignUpDTO(
     @NotBlank String name,
     @NotBlank String username,
     @NotBlank String password,
-    @NotBlank @Email Email email,
+    @NotBlank @Email String email,
     @NotNull Role role
 ) {
     
