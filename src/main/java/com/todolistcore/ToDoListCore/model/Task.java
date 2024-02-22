@@ -1,19 +1,21 @@
 package com.todolistcore.ToDoListCore.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Task")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +23,7 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String tittle;
+    private String title;
     private String description;
     private String createdDate;
     private String finalDate;
@@ -32,15 +34,9 @@ public class Task implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "task_colaborations",
-            joinColumns = @JoinColumn(name = "Collaborator_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id"))
-    private Set<Collaborator> collaborators;
-
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Collaborator> collaborators;
 
     public long getId() {
         return id;
@@ -50,12 +46,14 @@ public class Task implements Serializable {
         this.id = id;
     }
 
-    public String getTittle() {
-        return tittle;
+   
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -106,16 +104,15 @@ public class Task implements Serializable {
         this.user = user;
     }
 
-    public Set<Collaborator> getCollaborators() {
+    public List<Collaborator> getCollaborators() {
         return collaborators;
     }
 
-    public void setCollaborators(Set<Collaborator> collaborators) {
+    public void setCollaborators(List<Collaborator> collaborators) {
         this.collaborators = collaborators;
     }
 
    
-
     
 
 }

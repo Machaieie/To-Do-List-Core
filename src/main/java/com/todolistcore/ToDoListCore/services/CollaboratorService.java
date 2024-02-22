@@ -1,12 +1,14 @@
 package com.todolistcore.ToDoListCore.services;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todolistcore.ToDoListCore.dto.CollaboratorDTO;
+import com.todolistcore.ToDoListCore.exceptions.EmptyDatabaseException;
 import com.todolistcore.ToDoListCore.exceptions.ResourceNotFoundException;
 import com.todolistcore.ToDoListCore.model.Collaborator;
 import com.todolistcore.ToDoListCore.model.Task;
@@ -32,10 +34,20 @@ public class CollaboratorService {
         Task task = taskRepository.findById(collaboratorDTO.task_id()).orElseThrow(() -> new ResourceNotFoundException("Task with ID:: " + collaboratorDTO.task_id() + " not found"));
         Collaborator collaborator = new Collaborator();
         collaborator.setUser(user);
-        //collaborator.setTasks();
-        
-
+        collaborator.setTask(task);
         return collaboratorRepository.save(collaborator);
     }
+
+    public void deleteCollaborator(long id) throws ResourceNotFoundException{
+        Collaborator collaborator = collaboratorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Collaborator with ID: " + id + " not found!"));
+        collaboratorRepository.delete(collaborator);
+    }
     
+    public List<Collaborator> getAllCollaborators () throws EmptyDatabaseException{
+        List<Collaborator> collaborators = collaboratorRepository.findAll();
+        if(collaborators.isEmpty()){
+            throw new EmptyDatabaseException("No Collaborators found at database");
+        }
+        return collaborators;
+    }
 }

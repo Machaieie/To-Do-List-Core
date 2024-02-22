@@ -13,8 +13,7 @@ public record TaskDTO(
     @NotNull String finalDate,
     @NotNull TaskStatus status,
     @NotNull TaskPriority priority,
-    @NotNull long user_id,
-    Set<Long> colaborates
+    @NotNull long user_id
 ) {
     
 }

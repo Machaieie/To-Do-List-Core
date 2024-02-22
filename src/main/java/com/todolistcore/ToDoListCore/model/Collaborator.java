@@ -22,9 +22,9 @@ public class Collaborator implements Serializable{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "collaborators")
-    private Set<Task> tasks;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id")
+    private Task task;
     
 
 
@@ -44,13 +44,15 @@ public class Collaborator implements Serializable{
         this.user = user;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void setTask(Task task) {
+        this.task = task;
     }
+
+   
 
     
     
