@@ -30,8 +30,6 @@ public class TaskService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CollaboratorRepository collaboratorRepository;
 
     public Task addTask(TaskDTO taskDTO) throws Exception{
         if(taskRepository.existsByTitle(taskDTO.title())){
@@ -40,26 +38,20 @@ public class TaskService {
 
         User user = userRepository.findById(taskDTO.user_id()).orElseThrow(  () -> new ResourceNotFoundException("User with ID:: " + taskDTO.user_id() + " not found"));
         Task task = new Task();
-        task.setTittle(taskDTO.title());
+        task.setTitle(taskDTO.title());
         task.setDescription(taskDTO.description());
         task.setCreatedDate(getCurrentDateTime());
         task.setFinalDate(taskDTO.finalDate());
         task.setPriority(taskDTO.priority());
-        task.setStatus(taskDTO.status());
-        Set<Collaborator> colaborates = new HashSet<>();
-        for (Long collaboraId  : taskDTO.colaborates()) {
-            Collaborator collaborator = collaboratorRepository.findById(collaboraId).orElseThrow(() -> new ResourceNotFoundException("Collaborator with ID: " + collaboraId + " not found!"));
-            colaborates.add(collaborator);
-        }
-        task.setCollaborators(colaborates);
         task.setUser(user);
+        task.setStatus(taskDTO.status());
         return taskRepository.save(task);
     }
 
     public Task updateTask(long id, TaskDTO taskDTO) throws ResourceNotFoundException{
         Task existingTask = taskRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Task with ID: " + id + " not found!"));
-        existingTask.setTittle(taskDTO.title());
+        existingTask.setTitle(taskDTO.title());
         existingTask.setDescription(taskDTO.description());
         existingTask.setFinalDate(taskDTO.finalDate());
         existingTask.setPriority(taskDTO.priority());

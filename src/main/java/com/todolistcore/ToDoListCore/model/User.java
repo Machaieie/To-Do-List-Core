@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 
 @Entity
 @Table(name = "User")
@@ -31,59 +29,41 @@ public class User implements UserDetails{
     private String password;
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonManagedReference
     @JsonIgnore
     private List<Task> tasks;
 
-    @Column
-	private boolean accountNonExpired;
-
-	@Column
-	private boolean accountNonLocked;
-
-	@Column
-	private boolean credentialsNonExpired;
-
-	@Column
-	private boolean enabled;
-	
-
-    private String confirmationToken;
-
-	private LocalDateTime confirmationDate;
     
 
-    public User(String name, String username, String password) {
-        this.name = name;
-        this.username = username;
-        this.password = password;
-    }
     
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private Set<UserRole> roles = new HashSet<>();
-    
-    
-    @Transient
-    public void addRole(Role role) {
-        UserRole userRole = new UserRole(role);
-        userRole.setUser(this);
-        this.roles.add(userRole);
-    }
-
-    public User() {
-    }
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -92,19 +72,33 @@ public class User implements UserDetails{
         this.email = email;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    public Role getRole() {
+        return role;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public void setName(String name) {
+    public User(String name, String username, String password) {
         this.name = name;
+        this.username = username;
+        this.password = password;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+       return List.of( new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+       return "";
+    }
+
+    @Override
     public String getUsername() {
-        return username;
+       return this.username;
     }
 
     @Override
@@ -119,71 +113,17 @@ public class User implements UserDetails{
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return true;    
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-   
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
-    }
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+        return true;   
+     }
     
-    public String getConfirmationToken() {
-        return confirmationToken;
-    }
-    public void setConfirmationToken(String confirmationToken) {
-        this.confirmationToken = confirmationToken;
-    }
-    public LocalDateTime getConfirmationDate() {
-        return confirmationDate;
-    }
-    public void setConfirmationDate(LocalDateTime confirmationDate) {
-        this.confirmationDate = confirmationDate;
-    }
-    @Transient
-	public void addRole(UserRole role) {
-		role.setUser(this);
-		this.roles.add(role);
-	}
-    
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-      Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-		this.roles.forEach(role -> {
-			authorities.add(new SimpleGrantedAuthority(role.getRole().name()));
-		});
-		return authorities;
-    }
-   
+
+  
+
     
 }
