@@ -21,7 +21,7 @@ import com.todolistcore.ToDoListCore.services.TaskService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/task")
 public class TaskController {
 
     @Autowired

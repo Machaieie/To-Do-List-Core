@@ -20,7 +20,7 @@ import com.todolistcore.ToDoListCore.services.CollaboratorService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/collaborator")
 public class CollaboratorController {
 
     @Autowired
