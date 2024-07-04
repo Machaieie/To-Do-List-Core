@@ -2,11 +2,6 @@ package com.todolistcore.ToDoListCore.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
-
-import org.hibernate.annotations.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
