@@ -27,7 +27,7 @@ public class TaskService {
     @Autowired
     private UserRepository userRepository;
 
-    public Task addTask(TaskDTO taskDTO) throws Exception {
+    public String addTask(TaskDTO taskDTO) throws Exception {
         if (taskRepository.existsByTitle(taskDTO.title())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ja existe uma Tarefa com o título indicado");
         }
@@ -43,8 +43,8 @@ public class TaskService {
         task.setPriority(taskDTO.priority());
         task.setUser(user);
         task.setStatus(TaskStatus.INPROGRESS);
-        
-        return taskRepository.save(task);
+        taskRepository.save(task);
+        return "Tarefa Criada com Sucesso! \nTitulo: "+taskDTO.title();
     }
 
     public Task updateTask(long id, TaskDTO taskDTO) throws ResourceNotFoundException {
@@ -72,6 +72,19 @@ public class TaskService {
         if (tasks.isEmpty()) {
             throw new EmptyDatabaseException("No tasks at database");
         }
+        
+        return tasks;
+    }
+
+    public List<Task> getTasksByUserId(long userId) throws ResourceNotFoundException, EmptyDatabaseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID: " + userId + " not found!"));
+
+        List<Task> tasks = taskRepository.findByUser(user);
+        if (tasks.isEmpty()) {
+            throw new EmptyDatabaseException("No tasks found for user with ID: " + userId);
+        }
+
         return tasks;
     }
 

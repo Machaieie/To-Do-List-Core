@@ -18,6 +18,7 @@ import com.todolistcore.ToDoListCore.model.UserRole;
 import com.todolistcore.ToDoListCore.repository.UserRepository;
 import com.todolistcore.ToDoListCore.model.AuthenticationResponse;
 import com.todolistcore.ToDoListCore.model.Response;
+import com.todolistcore.ToDoListCore.model.Role;
 
 @Service
 public class AuthenticationService  {
@@ -44,7 +45,7 @@ public class AuthenticationService  {
       userdetails.setUsername(request.username());
       userdetails.setEmail(request.email());
       userdetails.setPassword(passwordEncoder.encode(request.password()));
-      userdetails.addRole(new UserRole(request.role()));
+      userdetails.addRole(new UserRole(Role.ADMIN));
       userdetails = userRepository.save(userdetails);
       String token = jwtService.generateToken(userdetails);
       return new AuthenticationResponse(token);
@@ -66,6 +67,7 @@ public class AuthenticationService  {
          UserDetails userDetails = (UserDetails) auth.getPrincipal();
          Response response = new Response();
          Set<UserRole> roles = ((User) auth.getPrincipal()).getRole();
+         response.setId(User.getId());
          response.setName(User.getName());
          response.setUsername(userDetails.getUsername());
          response.setEmail(User.getEmail());
