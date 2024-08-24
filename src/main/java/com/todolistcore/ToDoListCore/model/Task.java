@@ -3,12 +3,12 @@ package com.todolistcore.ToDoListCore.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Task")
@@ -29,11 +29,11 @@ public class Task implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @JsonIgnore 
     private User user;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore 
     private List<Collaborator> collaborators;
 
     public long getId() {
@@ -43,8 +43,6 @@ public class Task implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-
-   
 
     public String getTitle() {
         return title;
@@ -109,8 +107,5 @@ public class Task implements Serializable {
     public void setCollaborators(List<Collaborator> collaborators) {
         this.collaborators = collaborators;
     }
-
-   
-    
 
 }

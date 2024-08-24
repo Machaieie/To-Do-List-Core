@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolistcore.ToDoListCore.dto.CollaboratorDTO;
+import com.todolistcore.ToDoListCore.dto.CollaboratorTaskInfoDTO;
 import com.todolistcore.ToDoListCore.model.Collaborator;
 import com.todolistcore.ToDoListCore.services.CollaboratorService;
 
@@ -34,7 +35,7 @@ public class CollaboratorController {
         return new ResponseEntity<>(collaborators, HttpStatus.OK);
     }
 
-    @PostMapping("/collaborator")
+    @PostMapping("/addCollaborator")
     public ResponseEntity addCollaborator (@Valid @RequestBody CollaboratorDTO collaboratorDTO){
         try {
             Collaborator collaborator = collaboratorService.addCollaborator(collaboratorDTO);
@@ -54,6 +55,14 @@ public class CollaboratorController {
         }
     }
 
-
+    @GetMapping("/taskInfo")
+    public ResponseEntity<List<CollaboratorTaskInfoDTO>> getCollaboratorTaskInfo() {
+        try {
+            List<CollaboratorTaskInfoDTO> taskInfo = collaboratorService.getCollaboratorsTaskInfo();
+            return new ResponseEntity<>(taskInfo, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
     
 }

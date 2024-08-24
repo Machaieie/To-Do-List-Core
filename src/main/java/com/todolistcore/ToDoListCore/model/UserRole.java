@@ -20,9 +20,10 @@ public class UserRole implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIgnore
+  
 	@JoinColumn(name = "user_id")
 	@ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore 
 	private User user;
 
     @Enumerated(EnumType.STRING)

@@ -42,8 +42,9 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Task> tasks;
 
-    @JsonIgnore
+   
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore 
     private Set<UserRole> role = new HashSet<>();
 
     @Transient

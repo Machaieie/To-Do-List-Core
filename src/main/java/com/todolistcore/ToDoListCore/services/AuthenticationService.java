@@ -2,6 +2,8 @@ package com.todolistcore.ToDoListCore.services;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -80,4 +82,20 @@ public class AuthenticationService  {
       
 
    }
+
+   public List<Response> getAllUsers() {
+    List<User> users = userRepository.findAll();
+
+    List<Response> responseList = users.stream().map(user -> {
+        Response response = new Response();
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setUsername(user.getUsername());
+        response.setEmail(user.getEmail());
+        response.setRoles(user.getRole());
+        return response;
+    }).collect(Collectors.toList());
+
+    return responseList;
+}
 }

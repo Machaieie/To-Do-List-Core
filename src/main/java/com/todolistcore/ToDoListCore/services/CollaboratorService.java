@@ -3,11 +3,12 @@ package com.todolistcore.ToDoListCore.services;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todolistcore.ToDoListCore.dto.CollaboratorDTO;
+import com.todolistcore.ToDoListCore.dto.CollaboratorTaskInfoDTO;
 import com.todolistcore.ToDoListCore.exceptions.EmptyDatabaseException;
 import com.todolistcore.ToDoListCore.exceptions.ResourceNotFoundException;
 import com.todolistcore.ToDoListCore.model.Collaborator;
@@ -50,4 +51,21 @@ public class CollaboratorService {
         }
         return collaborators;
     }
+
+    public List<CollaboratorTaskInfoDTO> getCollaboratorsTaskInfo() throws EmptyDatabaseException {
+        List<Collaborator> collaborators = collaboratorRepository.findAll();
+
+        if (collaborators.isEmpty()) {
+            throw new EmptyDatabaseException("No Collaborators found in the database");
+        }
+
+        return collaborators.stream()
+            .map(collaborator -> new CollaboratorTaskInfoDTO(
+                collaborator.getUser().getUsername(),   // Nome do colaborador
+                collaborator.getTask().getTitle(),      // Título da tarefa
+                collaborator.getTask().getUser().getUsername() // Nome do usuário que criou a tarefa
+            ))
+            .collect(Collectors.toList());
+    }
+
 }
